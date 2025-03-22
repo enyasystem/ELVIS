@@ -1,0 +1,5 @@
+project_id = "eybfjesxbgazvhwtaskl"
+
+[global.env]
+FLUTTERWAVE_SECRET_KEY = "{{env.FLUTTERWAVE_SECRET_KEY}}"
+RESEND_API_KEY = "{{env.RESEND_API_KEY}}"
