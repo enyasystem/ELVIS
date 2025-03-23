@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -20,6 +19,11 @@ import Auth from "./pages/Auth";
 import AdminPayments from "./pages/AdminPayments";
 import AdminDashboard from "./pages/AdminDashboard";
 import ChangePassword from "./pages/ChangePassword";
+import TradingPage from './pages/services/Trading';
+import ConstructionPage from './pages/services/Construction';
+import ConsultancyPage from './pages/services/Consultancy';
+import FabricationPage from './pages/services/Fabrication';
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -40,6 +44,7 @@ const App: React.FC = () => {
               <Toaster />
               <Sonner />
               <BrowserRouter>
+                <ScrollToTop />
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/products" element={<Products />} />
@@ -61,6 +66,10 @@ const App: React.FC = () => {
                       <AdminDashboard />
                     </ProtectedRoute>
                   } />
+                  <Route path="/services/trading" element={<TradingPage />} />
+                  <Route path="/services/construction" element={<ConstructionPage />} />
+                  <Route path="/services/consultancy" element={<ConsultancyPage />} />
+                  <Route path="/services/fabrication" element={<FabricationPage />} />
                 </Routes>
               </BrowserRouter>
             </CartProvider>

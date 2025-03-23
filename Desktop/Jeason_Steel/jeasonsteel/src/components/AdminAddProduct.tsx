@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { z } from "zod";
 import { supabase, SUPABASE_URL } from "@/integrations/supabase/client";
-import { Loader2, Upload, Plus, Minus } from "lucide-react";
+import { Loader2, Upload, Plus, Minus, X } from "lucide-react";
 import { Label } from "@/components/ui/label";
 
 const productSchema = z.object({
@@ -22,12 +22,16 @@ type ProductFormData = {
   description: string;
   full_description: string;
   category: string;
-  imageFile: File | null;
+  imageFiles: File[];  // Changed from imageFile: File | null
+  imagePreviewUrls: string[]; // Added for multiple previews
   specifications: Record<string, string>;
 };
 
+// Update the ValidationErrors type
 type ValidationErrors = {
-  [key in keyof Omit<ProductFormData, "specifications">]?: string;
+  [key in keyof Omit<ProductFormData, "specifications" | "imagePreviewUrls" | "imageFiles">]?: string;
+} & {
+  imageFile?: string;
 };
 
 type SpecificationField = {
@@ -58,7 +62,8 @@ const AdminAddProduct = ({ onProductAdded }: AdminAddProductProps) => {
     description: "",
     full_description: "",
     category: "",
-    imageFile: null,
+    imageFiles: [],
+    imagePreviewUrls: [],
     specifications: {}
   });
   
@@ -67,20 +72,27 @@ const AdminAddProduct = ({ onProductAdded }: AdminAddProductProps) => {
     { key: "sizes", value: "Various" }
   ]);
   
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setFormData({ ...formData, imageFile: file });
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      setFormData(prev => ({
+        ...prev,
+        imageFiles: [...prev.imageFiles, ...files]
+      }));
       
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setImagePreview(event.target?.result as string);
-      };
-      reader.readAsDataURL(file);
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          setFormData(prev => ({
+            ...prev,
+            imagePreviewUrls: [...prev.imagePreviewUrls, event.target?.result as string]
+          }));
+        };
+        reader.readAsDataURL(file);
+      });
     }
   };
 
@@ -100,6 +112,15 @@ const AdminAddProduct = ({ onProductAdded }: AdminAddProductProps) => {
     setSpecFields(newSpecFields);
   };
 
+  const removeImage = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      imageFiles: prev.imageFiles.filter((_, i) => i !== index),
+      imagePreviewUrls: prev.imagePreviewUrls.filter((_, i) => i !== index)
+    }));
+  };
+
+  // Then update the validate function
   const validate = () => {
     try {
       productSchema.parse({
@@ -107,8 +128,8 @@ const AdminAddProduct = ({ onProductAdded }: AdminAddProductProps) => {
         price: Number(formData.price)
       });
       
-      if (!formData.imageFile) {
-        setErrors({ imageFile: "Please select an image file" });
+      if (formData.imageFiles.length === 0) {
+        setErrors(prev => ({ ...prev, imageFile: "Please select at least one image" }));
         return false;
       }
       
@@ -118,7 +139,7 @@ const AdminAddProduct = ({ onProductAdded }: AdminAddProductProps) => {
       if (error instanceof z.ZodError) {
         const newErrors: ValidationErrors = {};
         error.errors.forEach(err => {
-          const path = err.path[0] as keyof Omit<ProductFormData, "specifications">;
+          const path = err.path[0] as keyof Omit<ProductFormData, "specifications" | "imagePreviewUrls" | "imageFiles">;
           newErrors[path] = err.message;
         });
         setErrors(newErrors);
@@ -127,80 +148,32 @@ const AdminAddProduct = ({ onProductAdded }: AdminAddProductProps) => {
     }
   };
 
-  const uploadImage = async (file: File): Promise<string> => {
+  const uploadImages = async (files: File[]): Promise<string[]> => {
     try {
-      console.log("Starting image upload process...");
-      
-      // Create a safe file name
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${crypto.randomUUID()}.${fileExt}`;
-      
-      console.log(`Uploading file: ${fileName}, size: ${file.size} bytes, type: ${file.type}`);
-      
-      // Detailed environment check
-      const envInfo = {
-        origin: window.location.origin,
-        host: window.location.host,
-        pathname: window.location.pathname,
-        supabaseUrl: SUPABASE_URL,
-      };
-      console.log("Environment info:", envInfo);
-      
-      // Upload the file with retries
-      let uploadAttempt = 0;
-      let uploadSuccessful = false;
-      let uploadError = null;
-      let uploadData = null;
-      
-      while (uploadAttempt < 3 && !uploadSuccessful) {
-        uploadAttempt++;
-        console.log(`Upload attempt ${uploadAttempt}...`);
+      const uploadPromises = files.map(async (file) => {
+        const fileExt = file.name.split('.').pop();
+        // Generate a unique filename using timestamp and random string
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
         
-        try {
-          const result = await supabase.storage
-            .from('products')
-            .upload(fileName, file, {
-              cacheControl: '3600',
-              upsert: true
-            });
-            
-          uploadError = result.error;
-          uploadData = result.data;
-          
-          if (uploadError) {
-            console.error(`Upload error on attempt ${uploadAttempt}:`, uploadError);
-            // Wait briefly before retry
-            if (uploadAttempt < 3) await new Promise(r => setTimeout(r, 1000));
-          } else {
-            uploadSuccessful = true;
-            console.log(`Upload successful on attempt ${uploadAttempt}:`, uploadData);
-          }
-        } catch (err) {
-          console.error(`Exception during upload attempt ${uploadAttempt}:`, err);
-          uploadError = err;
-          // Wait briefly before retry
-          if (uploadAttempt < 3) await new Promise(r => setTimeout(r, 1000));
-        }
-      }
-      
-      if (!uploadSuccessful) {
-        throw new Error(`Upload failed after ${uploadAttempt} attempts: ${uploadError?.message || "Unknown error"}`);
-      }
-      
-      // Get the public URL
-      try {
+        const result = await supabase.storage
+          .from('products')
+          .upload(fileName, file, {
+            cacheControl: '3600',
+            upsert: true
+          });
+
+        if (result.error) throw result.error;
+
         const { data: urlData } = supabase.storage
           .from('products')
           .getPublicUrl(fileName);
-          
-        console.log("Generated public URL:", urlData.publicUrl);
+
         return urlData.publicUrl;
-      } catch (urlErr) {
-        console.error("Error getting public URL:", urlErr);
-        throw urlErr;
-      }
+      });
+
+      return await Promise.all(uploadPromises);
     } catch (error) {
-      console.error("Error in uploadImage:", error);
+      console.error("Error in uploadImages:", error);
       throw error;
     }
   };
@@ -216,13 +189,11 @@ const AdminAddProduct = ({ onProductAdded }: AdminAddProductProps) => {
     setIsSubmitting(true);
     
     try {
-      let imageUrl = '';
+      let imageUrls: string[] = [];
       
-      if (formData.imageFile) {
+      if (formData.imageFiles.length > 0) {
         try {
-          console.log("Starting image upload...");
-          imageUrl = await uploadImage(formData.imageFile);
-          console.log("Image uploaded successfully:", imageUrl);
+          imageUrls = await uploadImages(formData.imageFiles);
         } catch (uploadError) {
           console.error("Image upload failed:", uploadError);
           toast.error(`Image upload failed: ${uploadError instanceof Error ? uploadError.message : 'Unknown error'}`);
@@ -247,9 +218,9 @@ const AdminAddProduct = ({ onProductAdded }: AdminAddProductProps) => {
         price: Number(formData.price),
         description: formData.description,
         full_description: fullDescription,
-        image: imageUrl,
+        image: imageUrls[0], // First image as main image
+        images: imageUrls, // All images
         category: formData.category,
-        images: [imageUrl],
         specifications
       };
       
@@ -287,14 +258,14 @@ const AdminAddProduct = ({ onProductAdded }: AdminAddProductProps) => {
         description: "",
         full_description: "",
         category: "",
-        imageFile: null,
+        imageFiles: [],
+        imagePreviewUrls: [],
         specifications: {}
       });
       setSpecFields([
         { key: "material", value: "Standard" },
         { key: "sizes", value: "Various" }
       ]);
-      setImagePreview(null);
       
       if (onProductAdded) {
         onProductAdded();
@@ -447,7 +418,7 @@ const AdminAddProduct = ({ onProductAdded }: AdminAddProductProps) => {
           
           <div>
             <Label htmlFor="imageFile" className="block text-sm font-medium mb-1">
-              Product Image
+              Product Images
             </Label>
             <div className="grid gap-4">
               <Input
@@ -455,26 +426,38 @@ const AdminAddProduct = ({ onProductAdded }: AdminAddProductProps) => {
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
+                multiple // Add multiple attribute
                 className={errors.imageFile ? "border-red-500" : ""}
               />
               {errors.imageFile && <p className="mt-1 text-xs text-red-500">{errors.imageFile}</p>}
               
-              {imagePreview && (
-                <div className="h-40 w-full overflow-hidden rounded-md border">
-                  <img 
-                    src={imagePreview} 
-                    alt="Preview" 
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              )}
-              
-              {!imagePreview && (
-                <div className="h-40 w-full overflow-hidden rounded-md border flex items-center justify-center bg-muted">
-                  <Upload className="h-8 w-8 text-muted-foreground" />
-                  <p className="ml-2 text-sm text-muted-foreground">No image selected</p>
-                </div>
-              )}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {formData.imagePreviewUrls.map((preview, index) => (
+                  <div key={index} className="relative group">
+                    <div className="h-40 w-full overflow-hidden rounded-md border">
+                      <img 
+                        src={preview} 
+                        alt={`Preview ${index + 1}`} 
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))}
+                
+                {formData.imagePreviewUrls.length === 0 && (
+                  <div className="h-40 w-full overflow-hidden rounded-md border flex items-center justify-center bg-muted">
+                    <Upload className="h-8 w-8 text-muted-foreground" />
+                    <p className="ml-2 text-sm text-muted-foreground">No images selected</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           

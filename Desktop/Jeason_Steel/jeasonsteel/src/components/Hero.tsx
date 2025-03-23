@@ -10,19 +10,25 @@ const carouselData = [
     title: "Welcome to Jeason Steel Company",
     description: "Providing World-Class Steel Solutions and Services to clients in order to invest and create reliable infrastructure.",
     subtext: "We are your reliable Steel Partner.",
-    image: "/lovable-uploads/H3.png" // Replace with your steel factory image
+    image: "/lovable-uploads/H3.png",
+    buttonText: "View Products",
+    buttonLink: "/products"
   },
   {
     title: "Quality Steel Solutions",
     description: "Premium steel products engineered to meet the highest industry standards.",
     subtext: "Excellence in every detail",
-    image: "/images/steel-production.jpg" // Replace with your steel production image
+    image: "/images/steel-production.jpg",
+    buttonText: "About Us",
+    buttonLink: "/about"
   },
   {
     title: "Innovation & Expertise",
     description: "Leveraging cutting-edge technology to deliver exceptional steel products.",
     subtext: "Leading the industry forward",
-    image: "/images/steel-workers.jpg" // Replace with your steel workers image
+    image: "/images/steel-workers.jpg",
+    buttonText: "Our Services",
+    buttonLink: "/services"
   }
 ];
 
@@ -83,10 +89,10 @@ const Hero = () => {
                       className="flex flex-wrap gap-4"
                     >
                       <Link 
-                        to="/products"
+                        to={slide.buttonLink}
                         className="inline-flex items-center gap-2 px-6 py-3 bg-white text-steel-primary rounded-lg hover:bg-steel-light transition-all duration-300 transform hover:scale-105"
                       >
-                        View Products
+                        {slide.buttonText}
                         <ArrowRight className="h-5 w-5" />
                       </Link>
                       <Link 

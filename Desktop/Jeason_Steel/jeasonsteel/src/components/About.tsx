@@ -1,146 +1,139 @@
-import { Shield, Truck, Users } from "lucide-react";
+import { Shield, Truck, Users, Target, Clock, Award } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "./ui/carousel";
 
 const managementTeam = [
   {
-    title: "Chairman",
-    name: "Lady Cecilia Agbara",
-    image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
+    title: "Managing Director and Cheif Executive",
+    name: "Joseph E. Agbara",
+    image: "/lovable-uploads/chairman.jpg",
+    description: "He acquired his experience in various Steel Processing Mills in Germany. He oversees the general operations of the company, procurement of raw materials as well production and."
   },
   {
-    title: "Managing Director/Chief Executive Officer",
+    title: "Executive Director",
     name: "Engr. Emmanuel Agbara",
     image: "/lovable-uploads/Mr Osita.jpeg",
+    description: "Engr. Emmanuel Agbara leads Jeason Steel with a unique combination of technical expertise and business acumen. His innovative approach to steel manufacturing and distribution has transformed our operations and expanded our market presence across West Africa."
   },
   {
-    title: "Company Secretary",
-    name: "Barr. Kimberly Ukegbu",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
+    title: "Chief Engineer",
+    name: "Sebastian Oparaji",
+    image: "/lovable-uploads/secretary.jpg",
+    description: "As Company Secretary, Barr. Kimberly Ukegbu ensures corporate governance excellence and legal compliance. Her expertise in corporate law and regulatory matters strengthens our commitment to ethical business practices."
   },
 ];
 
 const features = [
   {
     icon: Shield,
-    title: "Quality Assured",
-    description: "All our products meet international quality standards",
+    title: "Quality Assurance",
+    description: "Our products undergo rigorous testing and meet international standards for excellence in steel manufacturing."
   },
   {
-    icon: Truck,
-    title: "Fast Delivery",
-    description: "Efficient logistics network across Lagos",
+    icon: Target,
+    title: "Precision Delivery",
+    description: "Strategic logistics network ensuring timely delivery across West Africa with real-time tracking."
   },
   {
     icon: Users,
-    title: "Expert Support",
-    description: "Professional team ready to assist you",
+    title: "Expert Consultation",
+    description: "Dedicated team of steel industry professionals providing comprehensive technical support."
   },
+  {
+    icon: Clock,
+    title: "Timely Service",
+    description: "Quick response times and efficient project execution to meet your deadlines."
+  },
+  {
+    icon: Award,
+    title: "Industry Leadership",
+    description: "Recognized excellence in steel manufacturing and distribution services."
+  },
+  {
+    icon: Truck,
+    title: "Nationwide Coverage",
+    description: "Extensive distribution network reaching all corners of Nigeria and beyond."
+  }
 ];
 
 const About = () => {
   return (
     <section className="py-16 bg-white">
-      <div className="container mx-auto px-4 space-y-16">
-        {/* Management Team Section */}
+      <div className="container mx-auto px-4 space-y-20">
+        {/* Company Overview */}
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-steel-primary mb-8 text-center">
-            Our Management Team
+            About Jeason Steel
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <p className="text-lg text-steel-gray text-center max-w-4xl mx-auto mb-12">
+            Since our establishment, Jeason Steel has been at the forefront of steel manufacturing and distribution in West Africa. We combine cutting-edge technology with decades of industry expertise to deliver superior steel products and services.
+          </p>
+        </div>
+
+        {/* Management Team Section */}
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-steel-primary mb-12 text-center">
+            Our Leadership Team
+          </h2>
+          <div className="space-y-16">
             {managementTeam.map((member, index) => (
-              <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-full h-64 object-cover"
-                />
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold text-steel-primary mb-2">
-                    {member.title}
+              <div key={index} className="flex flex-col md:flex-row items-center gap-8">
+                <div className="md:w-1/3">
+                  <div className="w-64 h-64 rounded-full overflow-hidden mx-auto border-4 border-steel-light">
+                    <img
+                      src={member.image}
+                      alt={member.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+                <div className="md:w-2/3 text-center md:text-left">
+                  <h3 className="text-2xl font-bold text-steel-primary mb-2">
+                    {member.name}
                   </h3>
-                  <p className="text-steel-gray">{member.name}</p>
-                </CardContent>
-              </Card>
+                  <p className="text-xl text-steel-secondary mb-4">{member.title}</p>
+                  <p className="text-steel-gray text-lg">{member.description}</p>
+                </div>
+              </div>
             ))}
           </div>
         </div>
 
-        {/* CEO Message Section */}
-        <div className="max-w-7xl mx-auto bg-steel-light rounded-lg p-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-            <div>
-              <img
-                src="/lovable-uploads/Mr Osita.jpeg"
-                alt="CEO"
-                className="rounded-lg w-full h-[400px] object-cover"
-              />
-            </div>
-            <div>
-              <h2 className="text-3xl font-bold text-steel-primary mb-4">
-                Message from the CEO
-              </h2>
-              <p className="text-steel-gray text-lg">
-                As the CEO of Jeason Steel, I am committed to delivering excellence in every aspect of our operations. Our focus remains on innovation, quality, and sustainable growth in the steel industry.
-              </p>
-              <p className="text-steel-gray text-lg mt-4">
-                - Engr. Emmanuel Agbara
-              </p>
-            </div>
-          </div>
-        </div>
-
         {/* Vision and Mission Section */}
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card className="overflow-hidden">
-              <img
-                src="/lovable-uploads/eye-glasses-looking-at-city-at-night.jpg"
-                alt="Vision"
-                className="w-full h-48 object-cover"
-              />
-              <CardContent className="p-6">
-                <h3 className="text-2xl font-bold text-steel-primary mb-4">Our Vision</h3>
-                <p className="text-steel-gray">
-                  Deliver high-quality iron and steel materials to Nigeria and West Africa while contributing significantly to the global steel value chain and trading economy.
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="overflow-hidden">
-              <img
-                src="/lovable-uploads/H1.png"
-                alt="Mission"
-                className="w-full h-48 object-cover"
-              />
-              <CardContent className="p-6">
-                <h3 className="text-2xl font-bold text-steel-primary mb-4">Our Mission</h3>
-                <p className="text-steel-gray">
-                  To be the leading provider of high-quality steel products in West Africa through innovation, sustainability, and excellence in service delivery.
-                </p>
-              </CardContent>
-            </Card>
+        <div className="max-w-7xl mx-auto bg-steel-light rounded-lg p-8 md:p-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold text-steel-primary">Our Vision</h3>
+              <p className="text-steel-gray text-lg">
+                To become the premier steel solutions provider in West Africa, recognized for quality, innovation, and sustainable practices in the global steel industry.
+              </p>
+            </div>
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold text-steel-primary">Our Mission</h3>
+              <p className="text-steel-gray text-lg">
+                To deliver exceptional steel products and services while fostering economic growth, environmental responsibility, and technological advancement in the steel sector.
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Features Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
-            <div key={index} className="p-6 text-center">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-steel-light mb-4">
-                <feature.icon className="h-8 w-8 text-steel-primary" />
+        {/* Features Grid */}
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-steel-primary mb-12 text-center">
+            Why Choose Jeason Steel
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <div key={index} className="p-6 text-center hover:bg-steel-light rounded-lg transition-all duration-300">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-steel-primary mb-4">
+                  <feature.icon className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-steel-primary mb-3">
+                  {feature.title}
+                </h3>
+                <p className="text-steel-gray">{feature.description}</p>
               </div>
-              <h3 className="text-xl font-semibold text-steel-primary mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-steel-gray">{feature.description}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
