@@ -5,20 +5,20 @@ const managementTeam = [
   {
     title: "Managing Director and Cheif Executive",
     name: "Joseph E. Agbara",
-    image: "/lovable-uploads/chairman.jpg",
-    description: "He acquired his experience in various Steel Processing Mills in Germany. He oversees the general operations of the company, procurement of raw materials as well production and."
+    image: "/lovable-uploads/Managing Director and Cheif Executive.jpg",
+    description: "He acquired his experience in various Steel Processing Mills in Germany. He oversees the general operations of the company, procurement of raw materials as well as production and sales of the finished goods. Mr. Agbara worked for a German Steel Firm Messrs NCIE LIMITED for over eleven (11) years as Branch Manager. He attended various courses and seminars both locally and abroad. He is married with children"
   },
   {
     title: "Executive Director",
     name: "Engr. Emmanuel Agbara",
     image: "/lovable-uploads/Mr Osita.jpeg",
-    description: "Engr. Emmanuel Agbara leads Jeason Steel with a unique combination of technical expertise and business acumen. His innovative approach to steel manufacturing and distribution has transformed our operations and expanded our market presence across West Africa."
+    description: "After he acquired his undergraduate degree in Mechanical Engineering from the University of Sheffield and his MSc in Engineering Project Management from the University of Leeds, he quickly joined in the steel trading business under the tutoring of Mr Joseph Agbara and other well experienced staff members. He currently manages and supervises the running of the company."
   },
   {
     title: "Chief Engineer",
     name: "Sebastian Oparaji",
     image: "/lovable-uploads/secretary.jpg",
-    description: "As Company Secretary, Barr. Kimberly Ukegbu ensures corporate governance excellence and legal compliance. Her expertise in corporate law and regulatory matters strengthens our commitment to ethical business practices."
+    description: "He has acquired his experience in various positions he has occupied over the years and is the chief engineer at our factory plant, who oversees the smooth running of production ensuring equipments are in shape. He is married with kids."
   },
 ];
 
@@ -62,10 +62,27 @@ const About = () => {
         {/* Company Overview */}
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-steel-primary mb-8 text-center">
-            About Jeason Steel
+            ABOUT JEASON STEEL COMPANY
           </h2>
-          <p className="text-lg text-steel-gray text-center max-w-4xl mx-auto mb-12">
-            Since our establishment, Jeason Steel has been at the forefront of steel manufacturing and distribution in West Africa. We combine cutting-edge technology with decades of industry expertise to deliver superior steel products and services.
+          <p className="text-lg text-steel-gray text-justify max-w-4xl mx-auto mb-12 leading-relaxed">
+            A family owned business, with its main office in Lagos, Nigeria, <b>Jeason Steel Company 
+            Limited</b> is a world class trader and producer of fabricated and galvanized steel products and 
+            structures. Utilizing cutting edge automated manufacturing technology in its main factory fully 
+            equipped and complimented by a skilled workforce, also in Lagos. Jeason has the capacity to 
+            produce 20,000 metric tons per annum of galvanized structures from its modern facility.
+            <br /><br />
+            The vast experiences of our management in the last twenty-five (25) years in the steel trading 
+            business, gives us the opportunity to serve our customers in a way of finding engineering 
+            solutions (and structures) and achieving their implementation completion. Over the years, we 
+            have provided thousands of customers with durable, affordable and versatile steel structured 
+            buildings and accessories for hundreds of different uses and in various regions. With our 
+            experience, we strive to deliver right and on time.
+            <br /><br />
+            With our well structured facility located in the industrial hub of central Lagos, Nigeria, we aim 
+            to please our customers and achieve our goals by offering efficient and effective services, from 
+            the time of production, fabrication, cutting, molding, packaging and distribution.
+            Today, Jeason continues to expand the horizons of metal building construction by providing 
+            better customer service, and improving products to meet every construction need.
           </p>
         </div>
 
@@ -104,13 +121,21 @@ const About = () => {
             <div className="space-y-6">
               <h3 className="text-2xl font-bold text-steel-primary">Our Vision</h3>
               <p className="text-steel-gray text-lg">
-                To become the premier steel solutions provider in West Africa, recognized for quality, innovation, and sustainable practices in the global steel industry.
+              Jeason Steel Company Limited has a vision of being a leading and dominant world class
+supplier and manufacturer of high quality iron and steel products to oil and gas
+companies as well as const rucon companies in Nigeria for the West African market,
+that promotes the steel trading economy, to create a beer and safer environment, to
+possibly create jobs to support the development of the community and to promote the
+
               </p>
             </div>
             <div className="space-y-6">
               <h3 className="text-2xl font-bold text-steel-primary">Our Mission</h3>
               <p className="text-steel-gray text-lg">
-                To deliver exceptional steel products and services while fostering economic growth, environmental responsibility, and technological advancement in the steel sector.
+Engaging and developing suitable employees to adequately and efficiently produce
+high-quality and allocang products at compeve prices within a reasonable lead me
+to the mar ket which enables development and maintenance of excellent customer
+relaonships that result in acceptable returns for company shareholders.
               </p>
             </div>
           </div>

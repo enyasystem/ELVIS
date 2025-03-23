@@ -19,7 +19,7 @@ const Header = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <img 
-                src="/lovable-uploads/9c506511-a536-4e27-b95b-e0d81e43036a.png" 
+                src="/images/Jeason Steel Logo.png" 
                 alt="Jeason Steel Limited" 
                 className="h-10 mr-2"
               />

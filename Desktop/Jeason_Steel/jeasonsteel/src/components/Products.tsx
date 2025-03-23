@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
@@ -117,7 +116,7 @@ const Products = () => {
             {displayProducts.map((product) => (
               <div 
                 key={product.id}
-                className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow flex flex-col h-full"
               >
                 <Link 
                   to={`/product/${product.id}`}
@@ -132,26 +131,21 @@ const Products = () => {
                     }}
                   />
                 </Link>
-                <div className="p-6">
+                <div className="p-6 flex flex-col flex-grow">
                   <Link 
                     to={`/product/${product.id}`}
-                    className="block"
+                    className="block flex-grow"
                   >
-                    <h3 className="text-xl font-semibold text-jeason-primary mb-2">
+                    <h3 className="text-xl font-semibold text-jeason-primary mb-2 line-clamp-2 text-justify">
                       {product.title}
                     </h3>
-                    <p className="text-steel-gray mb-4">
+                    <p className="text-steel-gray mb-4 line-clamp-3 text-justify leading-relaxed">
                       {product.description}
                     </p>
-                    {/* Commented out price display
-                    <p className="text-lg font-bold text-jeason-secondary mb-4">
-                      {formatPrice(product.price)}
-                    </p>
-                    */}
                   </Link>
                   <Link
                     to={`/product/${product.id}`}
-                    className="w-full bg-jeason-primary text-white py-2 px-4 rounded-md hover:bg-jeason-secondary transition-colors duration-200 flex items-center justify-center gap-2"
+                    className="w-full bg-jeason-primary text-white py-2 px-4 rounded-md hover:bg-jeason-secondary transition-colors duration-200 flex items-center justify-center gap-2 mt-auto"
                   >
                     <FileText className="h-5 w-5" />
                     View Details

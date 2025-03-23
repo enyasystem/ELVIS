@@ -1,5 +1,6 @@
-import { Building2, Factory, Briefcase, Settings } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Building2, Factory, Briefcase, Settings, ArrowRight } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const services = [
   {
@@ -33,13 +34,16 @@ const services = [
 ];
 
 const Services = () => {
+  const location = useLocation();
+  const isLandingPage = location.pathname === '/';
+
   return (
     <section id="services" className="py-16 bg-white">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-steel-primary text-center mb-12">
           Our Services
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {services.map((service) => {
             const Icon = service.icon;
             return (
@@ -61,6 +65,22 @@ const Services = () => {
             );
           })}
         </div>
+        
+        {/* View All Services Button - Only shown on landing page */}
+        {isLandingPage && (
+          <div className="text-center mt-8">
+            <Link to="/services">
+              <Button 
+                variant="default" 
+                size="lg"
+                className="group bg-jeason-primary hover:bg-jeason-secondary text-white px-8 py-6 text-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+              >
+                View All Services
+                <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform duration-300" />
+              </Button>
+            </Link>
+          </div>
+        )}
       </div>
     </section>
   );

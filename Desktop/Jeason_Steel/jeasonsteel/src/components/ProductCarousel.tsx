@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, ChevronLeft, ChevronRight, FileText } from "lucide-react";
@@ -16,7 +15,6 @@ import {
 
 const ProductCarousel = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [api, setApi] = useState<any>(null);
   const navigate = useNavigate();
 
@@ -28,22 +26,19 @@ const ProductCarousel = () => {
   useEffect(() => {
     if (!api) return;
 
-    // Autoplay interval (5 seconds)
     const autoplayInterval = setInterval(() => {
       if (api.canScrollNext()) {
         api.scrollNext();
       } else {
-        api.scrollTo(0); // Go back to beginning when reaching end
+        api.scrollTo(0);
       }
     }, 5000);
 
-    // Clear interval on component unmount
     return () => clearInterval(autoplayInterval);
   }, [api]);
 
   const fetchFeaturedProducts = async () => {
     try {
-      setIsLoading(true);
       const { data, error } = await supabase
         .from('products')
         .select('*')
@@ -54,7 +49,6 @@ const ProductCarousel = () => {
         throw error;
       }
       
-      // Transform database records to Product type
       const transformedProducts = data?.map(item => ({
         ...item,
         images: Array.isArray(item.images) ? item.images : [],
@@ -65,8 +59,6 @@ const ProductCarousel = () => {
     } catch (error) {
       console.error("Error fetching featured products:", error);
       setProducts([]);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -79,8 +71,8 @@ const ProductCarousel = () => {
     navigate(`/product/${productId}`);
   };
 
-  if (isLoading || products.length === 0) {
-    return null; // Don't show anything while loading
+  if (products.length === 0) {
+    return null;
   }
 
   return (
@@ -157,11 +149,15 @@ const ProductCarousel = () => {
           </div>
         </Carousel>
 
-        <div className="mt-8 text-center">
+        <div className="mt-12 text-center">
           <Link to="/products">
-            <Button variant="outline" className="group">
+            <Button 
+              variant="default" 
+              size="lg"
+              className="group bg-jeason-primary hover:bg-jeason-secondary text-white px-8 py-6 text-lg font-semibold transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
               View More Products
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform duration-300" />
             </Button>
           </Link>
         </div>
